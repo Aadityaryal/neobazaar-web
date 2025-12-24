@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8">
       <div className="text-center space-y-6">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent">
+        <h1 className="text-5xl font-bold bg-linear-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent">
           NeoBazaar
         </h1>
         <p className="text-2xl text-gray-300">
