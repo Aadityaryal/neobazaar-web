@@ -13,24 +13,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-dark-bg">
-      {/* Simple Header */}
-      <header className="w-full border-b border-dark-border bg-dark-bg/95 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent">
-                🏠 NeoBazaar
-              </span>
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="px-6 py-2 text-sm font-medium text-white hover:text-primary-400 transition-colors"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
 
       {/* Dashboard Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -41,7 +23,7 @@ export default function DashboardPage() {
               Welcome to Your Dashboard
             </h1>
             <p className="text-gray-400">
-              This is a placeholder dashboard page. Your authenticated content will appear here.
+              
             </p>
           </div>
 
@@ -87,25 +69,6 @@ export default function DashboardPage() {
                   </svg>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="card">
-            <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <button className="btn-primary">
-                + Create New Listing
-              </button>
-              <button className="btn-secondary">
-                Browse Marketplace
-              </button>
-              <button className="btn-secondary">
-                View My Profile
-              </button>
-              <button className="btn-secondary">
-                Settings
-              </button>
             </div>
           </div>
         </div>
