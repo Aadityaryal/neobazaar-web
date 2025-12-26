@@ -1,15 +1,5 @@
 "use client";
-
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-
 export default function DashboardPage() {
-  const router = useRouter();
-
-  const handleLogout = () => {
-    // Handle logout logic here
-    router.push("/login");
-  };
 
   return (
     <div className="min-h-screen bg-dark-bg">

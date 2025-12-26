@@ -32,14 +32,14 @@ export default function RegisterForm() {
     <div className="w-full">
       {/* Hero Section */}
       <div className="relative mb-8 rounded-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/20 to-primary-900/20 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-primary-600/20 to-primary-900/20 backdrop-blur-sm"></div>
         <div 
           className="relative h-48 bg-cover bg-center"
           style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070')",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-dark-bg"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-transparent to-dark-bg"></div>
           <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
               Join NeoBazaar Today
