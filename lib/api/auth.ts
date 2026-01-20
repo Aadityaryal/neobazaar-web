@@ -7,9 +7,10 @@ type LoginPayload = {
 }
 
 type RegisterPayload = {
-    fullName: string;
+    username: string;
     email: string;
     password: string;
+    confirmPassword: string;
 }
 
 type ApiErrorResponse = {
