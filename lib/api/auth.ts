@@ -1,4 +1,3 @@
-import type { RegisterFormData } from "@/app/(auth)/schema"
 import axios from "./axios"
 import { API } from "./endpoints"
 

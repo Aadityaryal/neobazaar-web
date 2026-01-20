@@ -5,7 +5,8 @@ import { setAuthToken, setUserData, clearAuthCookies } from "../cookie"
 import { redirect } from "next/navigation";
 export const handleRegister = async (data: RegisterFormData) => {
     try {
-        const response = await register(data)
+        const payload = { fullName: data.fullName, email: data.emailOrPhone, password: data.password }
+        const response = await register(payload)
         if (response.success) {
             return {
                 success: true,
