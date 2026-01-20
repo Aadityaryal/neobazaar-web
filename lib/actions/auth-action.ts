@@ -1,9 +1,9 @@
 "use server";
 import { login, register } from "@/lib/api/auth"
-import { LoginData, RegisterData } from "@/app/(auth)/schema"
+import type { LoginFormData, RegisterFormData } from "@/app/(auth)/schema"
 import { setAuthToken, setUserData, clearAuthCookies } from "../cookie"
 import { redirect } from "next/navigation";
-export const handleRegister = async (data: RegisterData) => {
+export const handleRegister = async (data: RegisterFormData) => {
     try {
         const response = await register(data)
         if (response.success) {
@@ -17,14 +17,16 @@ export const handleRegister = async (data: RegisterData) => {
             success: false,
             message: response.message || 'Registration failed'
         }
-    } catch (error: Error | any) {
-        return { success: false, message: error.message || 'Registration action failed' }
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Registration action failed'
+        return { success: false, message }
     }
 }
 
-export const handleLogin = async (data: LoginData) => {
+export const handleLogin = async (data: LoginFormData) => {
     try {
-        const response = await login(data)
+        const payload = { email: data.emailOrPhone, password: data.password }
+        const response = await login(payload)
         if (response.success) {
             await setAuthToken(response.token)
             await setUserData(response.data)
@@ -38,8 +40,9 @@ export const handleLogin = async (data: LoginData) => {
             success: false,
             message: response.message || 'Login failed'
         }
-    } catch (error: Error | any) {
-        return { success: false, message: error.message || 'Login action failed' }
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Login action failed'
+        return { success: false, message }
     }
 }
 

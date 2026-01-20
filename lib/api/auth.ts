@@ -1,22 +1,49 @@
-import { LoginData, RegisterData } from "@/app/(auth)/schema"
+import type { RegisterFormData } from "@/app/(auth)/schema"
 import axios from "./axios"
 import { API } from "./endpoints"
 
+type LoginPayload = {
+    email: string;
+    password: string;
+}
 
-export const register = async (registerData: RegisterData) => {
+type RegisterPayload = {
+    fullName: string;
+    email: string;
+    password: string;
+}
+
+type ApiErrorResponse = {
+    message?: string;
+}
+
+const getApiMessage = (error: unknown): string | undefined => {
+    if (typeof error === 'object' && error !== null && 'response' in error) {
+        const err = error as { response?: { data?: ApiErrorResponse } }
+        return err.response?.data?.message
+    }
+    return undefined
+}
+
+
+export const register = async (registerData: RegisterPayload) => {
     try {
         const response = await axios.post(API.AUTH.REGISTER, registerData)
         return response.data
-    } catch (error: Error | any) {
-        throw new Error(error.response?.data?.message || error.message || 'Registration failed')
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Registration failed'
+        const apiMessage = getApiMessage(error)
+        throw new Error(apiMessage || message)
     }
 }
 
-export const login = async (loginData: LoginData) => {
+export const login = async (loginData: LoginPayload) => {
     try {
         const response = await axios.post(API.AUTH.LOGIN, loginData)
         return response.data
-    } catch (error: Error | any) {
-        throw new Error(error.response?.data?.message || error.message || 'Login failed')
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Login failed'
+        const apiMessage = getApiMessage(error)
+        throw new Error(apiMessage || message)
     }
 }

@@ -4,13 +4,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { setCookie } from "cookies-next";
+import { useState, useTransition } from "react";
 import { LoginFormData, loginSchema } from "../schema";
+import { handleLogin } from "@/lib/actions/auth-action";
 
 export default function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [pending, setTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -20,36 +22,25 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Login data:", data);
-    // Redirect to dashboard after successful login
-    router.push("/auth/dashboard");
-  };
-
   const submit = async (values: LoginFormData) => {
     setError(null);
 
     setTransition(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       try {
         const response = await handleLogin(values);
         if (!response.success) {
           throw new Error(response.message);
         }
         if (response.success) {
-          // Set cookie on successful login
-          setCookie('authToken', response.token);
-          router.push('/user/dashboard');
+          router.push("/dashboard");
         } else {
           setError('Login failed');
         }
-      } catch (err: Error | any) {
-        setError(err.message || 'Login failed');
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Login failed');
       }
     });
-    console.log('login', values);
+    console.log("login", values);
   };
 
   return (
@@ -77,7 +68,10 @@ export default function LoginForm() {
 
       {/* Login Form Card */}
       <div className="card">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={handleSubmit(submit)} className="space-y-5">
+          {error && (
+            <p className="text-sm text-red-600">{error}</p>
+          )}
           {/* Email or Phone Input */}
           <div>
             <label htmlFor="emailOrPhone" className="block text-sm font-medium text-gray-300 mb-2">
@@ -133,10 +127,10 @@ export default function LoginForm() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || pending}
             className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? "Logging in..." : "Log In"}
+            {isSubmitting || pending ? "Logging in..." : "Log In"}
           </button>
 
           {/* Divider */}
