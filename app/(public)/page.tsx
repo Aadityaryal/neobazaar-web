@@ -1,6 +1,18 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getUserData } from "@/lib/cookie";
 
-export default function Home() {
+export default async function Home() {
+  const userData = await getUserData();
+  
+  if (userData?._id) {
+    if (userData.role === "admin") {
+      redirect("/admin/users");
+    } else {
+      redirect("/dashboard");
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8">
       <div className="text-center space-y-6">
