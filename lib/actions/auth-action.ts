@@ -1,15 +1,24 @@
 "use server";
-import { login, register } from "@/lib/api/auth"
+import { login, register, type LoginPayload, type RegisterPayload } from "@/lib/api/auth"
 import type { LoginFormData, RegisterFormData } from "@/app/(auth)/schema"
 import { setAuthToken, setUserData, clearAuthCookies } from "../cookie"
 import { redirect } from "next/navigation";
 export const handleRegister = async (data: RegisterFormData) => {
     try {
-        const payload = {
-            username: data.fullName,
+        // Extract username from email (part before @)
+        const username = data.emailOrPhone.split('@')[0];
+        
+        // Split fullName into firstName and lastName
+        const [firstName, ...lastNameParts] = data.fullName.trim().split(" ");
+        const lastName = lastNameParts.join(" ");
+        
+        const payload: RegisterPayload = {
+            username,
             email: data.emailOrPhone,
             password: data.password,
             confirmPassword: data.confirmPassword,
+            ...(firstName && { firstName }),
+            ...(lastName && { lastName }),
         }
         const response = await register(payload)
         if (response.success) {
@@ -31,7 +40,7 @@ export const handleRegister = async (data: RegisterFormData) => {
 
 export const handleLogin = async (data: LoginFormData) => {
     try {
-        const payload = { email: data.emailOrPhone, password: data.password }
+        const payload: LoginPayload = { email: data.emailOrPhone, password: data.password }
         const response = await login(payload)
         if (response.success) {
             await setAuthToken(response.token)
