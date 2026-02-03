@@ -91,7 +91,7 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">First Name</label>
+          <label className="label-text">First Name</label>
           <input
             name="firstname"
             value={formValues.firstname}
@@ -101,7 +101,7 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Last Name</label>
+          <label className="label-text">Last Name</label>
           <input
             name="lastname"
             value={formValues.lastname}
@@ -114,7 +114,7 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Email</label>
+          <label className="label-text">Email</label>
           <input
             type="email"
             name="email"
@@ -125,7 +125,7 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Username</label>
+          <label className="label-text">Username</label>
           <input
             type="text"
             name="username"
@@ -139,7 +139,7 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Role</label>
+          <label className="label-text">Role</label>
           <select
             name="role"
             value={formValues.role}
@@ -151,7 +151,7 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
           </select>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Password (optional)</label>
+          <label className="label-text">Password (optional)</label>
           <input
             type="password"
             name="password"
@@ -164,12 +164,12 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-300">Profile Image (optional)</label>
+        <label className="label-text">Profile Image (optional)</label>
         <input
           type="file"
           accept="image/png,image/jpeg,image/jpg"
           onChange={(event) => setImageFile(event.target.files?.[0] || null)}
-          className="input-field file:mr-4 file:rounded-md file:border-0 file:bg-dark-border file:px-4 file:py-2 file:text-sm file:text-white"
+          className="input-field file:mr-4 file:rounded-md file:border-0 file:bg-dark-border file:px-4 file:py-2 file:text-sm file:text-primary"
         />
       </div>
 

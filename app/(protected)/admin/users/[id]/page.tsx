@@ -1,99 +1,95 @@
+"use client";
+
 import Link from "next/link";
-import { getAdminUserById } from "@/lib/api/admin";
-import { getAuthToken } from "@/lib/cookie";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { deleteAdminUser, getAdminUserById } from "@/lib/api/admin";
 
-export default async function AdminUserDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  
-  let user = null;
-  try {
-    const token = await getAuthToken();
-    const response = await getAdminUserById(id, token || undefined);
-    user = response.success ? response.data : null;
-  } catch (err) {
-    console.error("Failed to fetch user:", err);
-  }
+type AdminUserDetail = {
+  userId: string;
+  name?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  role?: string;
+  location?: string;
+  createdAt?: string;
+};
 
-  const fullName = user ? [user.firstname, user.lastname].filter(Boolean).join(" ") : "";
+export default function AdminUserDetailPage() {
+  const params = useParams<{ id: string }>();
+  const router = useRouter();
+  const [row, setRow] = useState<AdminUserDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setError("");
+        const response = await getAdminUserById(params.id);
+        if (!response.success) {
+          throw new Error(response.message || "Failed to load user");
+        }
+        setRow(response.data as AdminUserDetail);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load user");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void load();
+  }, [params.id]);
+
+  const remove = async () => {
+    if (!row?.userId || !window.confirm(`Delete user ${row.userId}?`)) {
+      return;
+    }
+    try {
+      const response = await deleteAdminUser(row.userId);
+      if (!response.success) {
+        throw new Error(response.message || "Failed to delete user");
+      }
+      router.push("/admin/users");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete user");
+    }
+  };
 
   return (
-    <div className="min-h-screen px-6 py-12">
-      <div className="mx-auto w-full max-w-4xl">
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-white">User Details</h1>
-            <p className="mt-2 text-gray-400">User profile information</p>
-          </div>
-          <Link href={`/admin/users/${id}/edit`} className="btn-secondary w-auto px-6">
-            Edit User
-          </Link>
-        </div>
-
-        {user ? (
-          <div className="card space-y-4">
-            {user.image && (
-              <div className="mb-6">
-                <img 
-                  src={`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5050'}${user.image}`}
-                  alt={fullName}
-                  className="w-32 h-32 rounded-lg object-cover"
-                />
-              </div>
-            )}
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="sm:col-span-2">
-                <label className="text-sm text-gray-400">Full Name</label>
-                <p className="text-lg text-white font-medium">{fullName || user.username || "-"}</p>
-              </div>
-              
-              <div>
-                <label className="text-sm text-gray-400">Email</label>
-                <p className="text-white">{user.email || "-"}</p>
-              </div>
-              
-              <div>
-                <label className="text-sm text-gray-400">Username</label>
-                <p className="text-white">{user.username || "-"}</p>
-              </div>
-              
-              <div>
-                <label className="text-sm text-gray-400">Role</label>
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
-                  user.role === "admin" 
-                    ? "bg-red-900/30 text-red-300" 
-                    : "bg-blue-900/30 text-blue-300"
-                }`}>
-                  {user.role || "user"}
-                </span>
-              </div>
-              
-              <div>
-                <label className="text-sm text-gray-400">Created At</label>
-                <p className="text-white">{new Date(user.createdAt).toLocaleDateString()}</p>
-              </div>
-              
-              {user.updatedAt && (
-                <div>
-                  <label className="text-sm text-gray-400">Last Updated</label>
-                  <p className="text-white">{new Date(user.updatedAt).toLocaleDateString()}</p>
-                </div>
-              )}
+    <div className="page-shell">
+      <div className="page-container">
+        <div className="mx-auto max-w-4xl space-y-4">
+          <div className="card flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h1 className="page-title">User Detail</h1>
+              <p className="text-secondary">Admin user detail and management actions.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/admin/users" className="btn-secondary btn-sm">Back</Link>
+              <Link href={`/admin/users/${params.id}/edit`} className="btn-primary btn-sm">Edit</Link>
+              <button className="btn-secondary btn-sm" onClick={remove}>Delete</button>
             </div>
           </div>
-        ) : (
-          <div className="card">
-            <p className="text-center text-red-400">Unable to load user details.</p>
-          </div>
-        )}
-        
-        <Link href="/admin/users" className="mt-6 inline-block text-primary-400 hover:text-primary-300">
-          ← Back to Users
-        </Link>
+
+          {error && <div className="alert-error">{error}</div>}
+
+          {loading ? (
+            <div className="card text-sm text-secondary">Loading user…</div>
+          ) : !row ? (
+            <div className="card empty-state">User not found.</div>
+          ) : (
+            <div className="card space-y-1">
+              <p className="text-sm text-primary">Name: {row.name || [row.firstName, row.lastName].filter(Boolean).join(" ") || "-"}</p>
+              <p className="text-sm text-secondary">User ID: {row.userId}</p>
+              <p className="text-sm text-secondary">Email: {row.email || "-"}</p>
+              <p className="text-sm text-secondary">Role: {row.role || "-"}</p>
+              <p className="text-sm text-secondary">Location: {row.location || "-"}</p>
+              {row.createdAt && <p className="text-xs text-muted">Created: {new Date(row.createdAt).toLocaleString()}</p>}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
