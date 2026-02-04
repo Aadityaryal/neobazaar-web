@@ -46,12 +46,12 @@ export default function ForgotPasswordForm() {
             backgroundImage: "url(&apos;https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&apos;)",
           }}
         >
-          <div className="absolute inset-0 bg-linear-to-b from-transparent to-dark-bg"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-transparent to-black/80"></div>
           <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+            <h1 className="mb-2 text-3xl font-bold text-primary sm:text-4xl">
               Reset Your Password
             </h1>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-secondary">
               We&apos;ll send you a link to reset your password
             </p>
           </div>
@@ -65,7 +65,7 @@ export default function ForgotPasswordForm() {
           {success && <p className="text-sm text-green-400">{success}</p>}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="email" className="label-text">
               Email Address
             </label>
             <input
@@ -88,13 +88,13 @@ export default function ForgotPasswordForm() {
           </button>
 
           <div className="text-center space-y-2 mt-6">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-secondary">
               Remembered your password?{" "}
               <Link href="/login" className="text-primary-400 hover:text-primary-300 font-medium">
                 Back to login
               </Link>
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-secondary">
               Don&apos;t have an account?{" "}
               <Link href="/register" className="text-primary-400 hover:text-primary-300 font-medium">
                 Sign up here
@@ -104,7 +104,7 @@ export default function ForgotPasswordForm() {
         </form>
 
         {/* Footer */}
-        <div className="mt-8 pt-6 border-t border-dark-border text-center text-xs text-gray-500">
+        <div className="mt-8 border-t border-dark-border pt-6 text-center text-xs text-muted">
           <p>&copy; 2025 NeoBazaar · Made in Nepal</p>
           <p className="mt-1">KYC Verified Platform · Encrypted · 8,421 happy users</p>
         </div>
