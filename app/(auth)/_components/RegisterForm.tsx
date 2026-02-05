@@ -4,9 +4,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { RegisterFormData, registerSchema } from "../schema";
 import { handleRegister } from "@/lib/actions/auth-action";
+import { strings, type LangCode } from "@/lib/i18n";
+
+function readLangCookie(): LangCode {
+  if (typeof document === "undefined") return "en";
+  const match = document.cookie.match(/(?:^|; )lang=(en|ne)/);
+  return match?.[1] === "ne" ? "ne" : "en";
+}
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -14,6 +21,15 @@ export default function RegisterForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [lang, setLang] = useState<LangCode>("en");
+  const text = strings[lang];
+
+  useEffect(() => {
+    setLang(readLangCookie());
+    const onLangChanged = () => setLang(readLangCookie());
+    window.addEventListener("nb:lang-changed", onLangChanged);
+    return () => window.removeEventListener("nb:lang-changed", onLangChanged);
+  }, []);
 
   const {
     register,
@@ -40,34 +56,14 @@ export default function RegisterForm() {
 
   return (
     <div className="w-full">
-      {/* Hero Section */}
-      <div className="relative mb-8 rounded-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-br from-primary-600/20 to-primary-900/20 backdrop-blur-sm"></div>
-        <div
-          className="relative h-48 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070')",
-          }}
-        >
-          <div className="absolute inset-0 bg-linear-to-b from-transparent to-dark-bg"></div>
-          <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-              Join NeoBazaar Today
-            </h1>
-            <p className="text-sm text-gray-300">
-              Create your account and start exploring Nepal&apos;s trusted marketplace
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Register Form Card */}
       <div className="card">
+        <h1 className="mb-2 page-title">{text.registerTitle}</h1>
+        <p className="mb-6 text-sm text-secondary">{text.registerSubtitle}</p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {error && <p className="text-sm text-red-600">{error}</p>}
           {/* Full Name Input */}
           <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="fullName" className="label-text">
               Full Name
             </label>
             <input
@@ -82,26 +78,42 @@ export default function RegisterForm() {
             )}
           </div>
 
-          {/* Email or Phone Input */}
+          {/* Email Input */}
           <div>
-            <label htmlFor="emailOrPhone" className="block text-sm font-medium text-gray-300 mb-2">
-              Email or Phone
+            <label htmlFor="email" className="label-text">
+              Email
             </label>
             <input
-              id="emailOrPhone"
-              type="text"
-              placeholder="Enter your email or phone number"
-              {...register("emailOrPhone")}
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              {...register("email")}
               className="input-field"
             />
-            {errors.emailOrPhone && (
-              <p className="mt-1 text-sm text-red-400">{errors.emailOrPhone.message}</p>
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="location" className="label-text">
+              Location
+            </label>
+            <input
+              id="location"
+              type="text"
+              placeholder="Enter your location"
+              {...register("location")}
+              className="input-field"
+            />
+            {errors.location && (
+              <p className="mt-1 text-sm text-red-400">{errors.location.message}</p>
             )}
           </div>
 
           {/* Password Input */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="password" className="label-text">
               Password
             </label>
             <div className="relative">
@@ -115,7 +127,7 @@ export default function RegisterForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                className="absolute top-1/2 right-3 -translate-y-1/2 text-secondary hover:text-primary"
               >
                 {showPassword ? (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +148,7 @@ export default function RegisterForm() {
 
           {/* Confirm Password Input */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="confirmPassword" className="label-text">
               Confirm Password
             </label>
             <div className="relative">
@@ -150,7 +162,7 @@ export default function RegisterForm() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                className="absolute top-1/2 right-3 -translate-y-1/2 text-secondary hover:text-primary"
               >
                 {showConfirmPassword ? (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,7 +187,7 @@ export default function RegisterForm() {
             disabled={isSubmitting || pending}
             className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting || pending ? "Creating Account..." : "Create Account"}
+            {isSubmitting || pending ? text.creating : text.registerBtn}
           </button>
 
           {/* Divider */}
@@ -184,7 +196,7 @@ export default function RegisterForm() {
               <div className="w-full border-t border-dark-border"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-dark-card text-gray-400">or sign up with</span>
+              <span className="bg-dark-card px-4 text-secondary">or sign up with</span>
             </div>
           </div>
 
@@ -226,13 +238,13 @@ export default function RegisterForm() {
 
           {/* Links */}
           <div className="text-center space-y-2 mt-6">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-secondary">
               Already have an account?{" "}
               <Link href="/login" className="text-primary-400 hover:text-primary-300 font-medium">
                 Log in here
               </Link>
             </p>
-            <p className="text-xs text-gray-500 mt-4">
+            <p className="mt-4 text-xs text-muted">
               By creating an account, you agree to our{" "}
               <a href="#" className="text-primary-400 hover:text-primary-300">Terms of Service</a>
               {" "}and{" "}
@@ -242,7 +254,7 @@ export default function RegisterForm() {
         </form>
 
         {/* Footer */}
-        <div className="mt-8 pt-6 border-t border-dark-border text-center text-xs text-gray-500">
+        <div className="mt-8 border-t border-dark-border pt-6 text-center text-xs text-muted">
           <p>© 2025 NeoBazaar · Made in Nepal</p>
           <p className="mt-1">KYC Verified Platform · Encrypted · 8,421 happy users</p>
         </div>

@@ -73,12 +73,12 @@ export default function ResetPasswordForm() {
             backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070')",
           }}
         >
-          <div className="absolute inset-0 bg-linear-to-b from-transparent to-dark-bg"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-transparent to-black/80"></div>
           <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+            <h1 className="mb-2 text-3xl font-bold text-primary sm:text-4xl">
               Create New Password
             </h1>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-secondary">
               Enter a strong password to secure your account
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function ResetPasswordForm() {
           {success && <p className="text-sm text-green-400">{success}</p>}
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="password" className="label-text">
               New Password
             </label>
             <div className="relative">
@@ -109,7 +109,7 @@ export default function ResetPasswordForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                className="absolute top-1/2 right-3 -translate-y-1/2 text-secondary hover:text-primary"
               >
                 {showPassword ? (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,7 +126,7 @@ export default function ResetPasswordForm() {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="confirmPassword" className="label-text">
               Confirm Password
             </label>
             <div className="relative">
@@ -143,7 +143,7 @@ export default function ResetPasswordForm() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                className="absolute top-1/2 right-3 -translate-y-1/2 text-secondary hover:text-primary"
               >
                 {showConfirmPassword ? (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,7 +168,7 @@ export default function ResetPasswordForm() {
           </button>
 
           <div className="text-center space-y-2 mt-6">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-secondary">
               <Link href="/login" className="text-primary-400 hover:text-primary-300 font-medium">
                 Back to login
               </Link>
@@ -177,7 +177,7 @@ export default function ResetPasswordForm() {
         </form>
 
         {/* Footer */}
-        <div className="mt-8 pt-6 border-t border-dark-border text-center text-xs text-gray-500">
+        <div className="mt-8 border-t border-dark-border pt-6 text-center text-xs text-muted">
           <p>© 2025 NeoBazaar · Made in Nepal</p>
           <p className="mt-1">KYC Verified Platform · Encrypted · 8,421 happy users</p>
         </div>
