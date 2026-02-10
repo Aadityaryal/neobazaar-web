@@ -65,7 +65,7 @@ export default function CreateUserForm() {
       
       {/* Full Name Input */}
       <div>
-        <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="fullName" className="label-text">
           Full Name
         </label>
         <input
@@ -82,7 +82,7 @@ export default function CreateUserForm() {
 
       {/* Email or Phone Input */}
       <div>
-        <label htmlFor="emailOrPhone" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="emailOrPhone" className="label-text">
           Email or Phone
         </label>
         <input
@@ -99,7 +99,7 @@ export default function CreateUserForm() {
 
       {/* Password Input */}
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="password" className="label-text">
           Password
         </label>
         <div className="relative">
@@ -113,7 +113,7 @@ export default function CreateUserForm() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+            className="absolute top-1/2 right-3 -translate-y-1/2 text-secondary hover:text-primary"
           >
             {showPassword ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +134,7 @@ export default function CreateUserForm() {
 
       {/* Confirm Password Input */}
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="confirmPassword" className="label-text">
           Confirm Password
         </label>
         <div className="relative">
@@ -148,7 +148,7 @@ export default function CreateUserForm() {
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+            className="absolute top-1/2 right-3 -translate-y-1/2 text-secondary hover:text-primary"
           >
             {showConfirmPassword ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,12 +169,12 @@ export default function CreateUserForm() {
 
       {/* Profile Image */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-300">Profile Image (optional)</label>
+        <label className="label-text">Profile Image (optional)</label>
         <input
           type="file"
           accept="image/png,image/jpeg,image/jpg"
           onChange={(event) => setImageFile(event.target.files?.[0] || null)}
-          className="input-field file:mr-4 file:rounded-md file:border-0 file:bg-dark-border file:px-4 file:py-2 file:text-sm file:text-white"
+          className="input-field file:mr-4 file:rounded-md file:border-0 file:bg-dark-border file:px-4 file:py-2 file:text-sm file:text-primary"
         />
       </div>
 
