@@ -38,11 +38,19 @@ export default async function Header() {
                     Dashboard
                   </Link>
                 )}
+                {isAdmin && (
+                  <Link
+                    href="/admin/dashboard"
+                    className="px-3 py-2 text-sm font-medium text-white hover:text-primary-400 transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                )}
                 <Link
                   href={isAdmin ? "/admin/users" : "/user/profile"}
                   className="px-3 py-2 text-sm font-medium text-white hover:text-primary-400 transition-colors"
                 >
-                  {isAdmin ? "Admin" : "Profile"}
+                  {isAdmin ? "Users" : "Profile"}
                 </Link>
                 <form action={handleLogout}>
                   <button

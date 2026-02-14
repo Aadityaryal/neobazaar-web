@@ -7,7 +7,7 @@ export default async function Home() {
   
   if (userData?._id) {
     if (userData.role === "admin") {
-      redirect("/admin/users");
+      redirect("/admin/dashboard");
     } else {
       redirect("/dashboard");
     }

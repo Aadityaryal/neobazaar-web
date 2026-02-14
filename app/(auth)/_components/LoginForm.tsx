@@ -34,7 +34,7 @@ export default function LoginForm() {
         if (response.success) {
           const role = response.data?.role;
           if (role === "admin") {
-            router.push("/admin/users");
+            router.push("/admin/dashboard");
           } else {
             router.push("/dashboard");
           }
@@ -127,6 +127,11 @@ export default function LoginForm() {
             {errors.password && (
               <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>
             )}
+            <div className="mt-2 text-right">
+              <Link href="/forgot-password" className="text-sm text-primary-400 hover:text-primary-300">
+                Forgot password?
+              </Link>
+            </div>
           </div>
 
           {/* Submit Button */}

@@ -2,14 +2,17 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { handleAdminUpdateUser } from "@/lib/actions/admin-action";
+import { updateAdminUser } from "@/lib/api/admin";
+import { getAuthToken } from "@/lib/cookie";
 
 type AdminUser = {
   _id: string;
-  firstName?: string;
-  lastName?: string;
+  firstname?: string;
+  lastname?: string;
   email?: string;
+  username?: string;
   role?: string;
+  image?: string;
 };
 
 export default function EditUserForm({ user }: { user: AdminUser }) {
@@ -19,9 +22,10 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
   const [success, setSuccess] = useState<string | null>(null);
 
   const [formValues, setFormValues] = useState({
-    firstName: user.firstName || "",
-    lastName: user.lastName || "",
+    firstname: user.firstname || "",
+    lastname: user.lastname || "",
     email: user.email || "",
+    username: user.username || "",
     role: user.role || "user",
     password: "",
   });
@@ -39,14 +43,17 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
     setSuccess(null);
 
     const formData = new FormData();
-    if (formValues.firstName) {
-      formData.append("firstName", formValues.firstName);
+    if (formValues.firstname) {
+      formData.append("firstname", formValues.firstname);
     }
-    if (formValues.lastName) {
-      formData.append("lastName", formValues.lastName);
+    if (formValues.lastname) {
+      formData.append("lastname", formValues.lastname);
     }
     if (formValues.email) {
       formData.append("email", formValues.email);
+    }
+    if (formValues.username) {
+      formData.append("username", formValues.username);
     }
     if (formValues.role) {
       formData.append("role", formValues.role);
@@ -59,14 +66,21 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
     }
 
     startTransition(async () => {
-      const response = await handleAdminUpdateUser(user._id, formData);
-      if (!response.success) {
-        setError(response.message || "Failed to update user");
-        return;
-      }
+      try {
+        const token = await getAuthToken();
+        const response = await updateAdminUser(user._id, formData, token || undefined);
+        if (!response.success) {
+          setError(response.message || "Failed to update user");
+          return;
+        }
 
-      setSuccess("User updated successfully.");
-      router.push(`/admin/users/${user._id}`);
+        setSuccess("User updated successfully.");
+        setTimeout(() => {
+          router.push(`/admin/users/${user._id}`);
+        }, 1500);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to update user");
+      }
     });
   };
 
@@ -79,8 +93,8 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">First Name</label>
           <input
-            name="firstName"
-            value={formValues.firstName}
+            name="firstname"
+            value={formValues.firstname}
             onChange={handleChange}
             placeholder="First name"
             className="input-field"
@@ -89,8 +103,8 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">Last Name</label>
           <input
-            name="lastName"
-            value={formValues.lastName}
+            name="lastname"
+            value={formValues.lastname}
             onChange={handleChange}
             placeholder="Last name"
             className="input-field"
@@ -98,48 +112,62 @@ export default function EditUserForm({ user }: { user: AdminUser }) {
         </div>
       </div>
 
-      <div>
-        <label className="mb-2 block text-sm font-medium text-gray-300">Email</label>
-        <input
-          type="email"
-          name="email"
-          value={formValues.email}
-          onChange={handleChange}
-          placeholder="user@example.com"
-          className="input-field"
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-300">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formValues.email}
+            onChange={handleChange}
+            placeholder="user@example.com"
+            className="input-field"
+          />
+        </div>
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-300">Username</label>
+          <input
+            type="text"
+            name="username"
+            value={formValues.username}
+            onChange={handleChange}
+            placeholder="username"
+            className="input-field"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="mb-2 block text-sm font-medium text-gray-300">Role</label>
-        <select
-          name="role"
-          value={formValues.role}
-          onChange={handleChange}
-          className="input-field"
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="mb-2 block text-sm font-medium text-gray-300">Password (optional)</label>
-        <input
-          type="password"
-          name="password"
-          value={formValues.password}
-          onChange={handleChange}
-          placeholder="Set a new password"
-          className="input-field"
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-300">Role</label>
+          <select
+            name="role"
+            value={formValues.role}
+            onChange={handleChange}
+            className="input-field"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-300">Password (optional)</label>
+          <input
+            type="password"
+            name="password"
+            value={formValues.password}
+            onChange={handleChange}
+            placeholder="Leave empty to keep current"
+            className="input-field"
+          />
+        </div>
       </div>
 
       <div>
         <label className="mb-2 block text-sm font-medium text-gray-300">Profile Image (optional)</label>
         <input
           type="file"
-          accept="image/png,image/jpeg"
+          accept="image/png,image/jpeg,image/jpg"
           onChange={(event) => setImageFile(event.target.files?.[0] || null)}
           className="input-field file:mr-4 file:rounded-md file:border-0 file:bg-dark-border file:px-4 file:py-2 file:text-sm file:text-white"
         />

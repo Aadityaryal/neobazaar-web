@@ -50,7 +50,7 @@ export function middleware(request: NextRequest) {
 
   if (isDashboardRoute && userData?.role === "admin") {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin/users";
+    url.pathname = "/admin/dashboard";
     return NextResponse.redirect(url);
   }
 

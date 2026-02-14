@@ -65,3 +65,51 @@ export const handleLogout = async () => {
     await clearAuthCookies();
     return redirect('/login');
 }
+
+export const handleForgotPassword = async (email: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5050'}/api/auth/forgot-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to send reset email');
+        }
+        
+        return {
+            success: true,
+            message: data.message || 'Reset email sent'
+        };
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Forgot password action failed';
+        return { success: false, message };
+    }
+}
+
+export const handleResetPassword = async (token: string, password: string, confirmPassword: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5050'}/api/auth/reset-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, password, confirmPassword })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to reset password');
+        }
+        
+        return {
+            success: true,
+            message: data.message || 'Password reset successful'
+        };
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Reset password action failed';
+        return { success: false, message };
+    }
+}
