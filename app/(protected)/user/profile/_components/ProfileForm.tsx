@@ -67,7 +67,7 @@ export default function ProfileForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">First Name</label>
+          <label className="label-text">First Name</label>
           <input
             name="firstName"
             value={formValues.firstName}
@@ -77,7 +77,7 @@ export default function ProfileForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Last Name</label>
+          <label className="label-text">Last Name</label>
           <input
             name="lastName"
             value={formValues.lastName}
@@ -89,7 +89,7 @@ export default function ProfileForm({
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-300">Email</label>
+        <label className="label-text">Email</label>
         <input
           type="email"
           name="email"
@@ -101,12 +101,12 @@ export default function ProfileForm({
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-300">Profile Image (optional)</label>
+        <label className="label-text">Profile Image (optional)</label>
         <input
           type="file"
           accept="image/png,image/jpeg"
           onChange={(event) => setImageFile(event.target.files?.[0] || null)}
-          className="input-field file:mr-4 file:rounded-md file:border-0 file:bg-dark-border file:px-4 file:py-2 file:text-sm file:text-white"
+          className="input-field file:mr-4 file:rounded-md file:border-0 file:bg-dark-border file:px-4 file:py-2 file:text-sm file:text-primary"
         />
       </div>
 
