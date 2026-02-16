@@ -1,0 +1,1 @@
+export default function FourOhFourPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">404</h1><p className="text-secondary">Page not found.</p></div></div></div>; }

@@ -1,0 +1,1 @@
+export default function FiveHundredPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">500</h1><p className="text-secondary">Internal server error state.</p></div></div></div>; }

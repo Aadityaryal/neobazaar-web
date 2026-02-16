@@ -1,0 +1,1 @@
+export default function AboutPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">About</h1><p className="text-secondary">About NeoBazaar.</p></div></div></div>; }
