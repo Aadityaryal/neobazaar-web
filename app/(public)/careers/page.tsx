@@ -1,0 +1,1 @@
+export default function CareersPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">Careers</h1><p className="text-secondary">Join the NeoBazaar team.</p></div></div></div>; }

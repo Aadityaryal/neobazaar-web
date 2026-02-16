@@ -1,0 +1,1 @@
+export default function ContactPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">Contact</h1><p className="text-secondary">Contact support and operations.</p></div></div></div>; }
