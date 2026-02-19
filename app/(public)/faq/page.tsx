@@ -1,0 +1,1 @@
+export default function FaqPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">FAQ</h1><p className="text-secondary">Frequently asked questions.</p></div></div></div>; }
