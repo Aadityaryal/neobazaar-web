@@ -1,0 +1,1 @@
+export default function TermsPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">Terms</h1><p className="text-secondary">Terms of service.</p></div></div></div>; }
