@@ -1,0 +1,1 @@
+export default function PrivacyPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">Privacy</h1><p className="text-secondary">Privacy policy.</p></div></div></div>; }

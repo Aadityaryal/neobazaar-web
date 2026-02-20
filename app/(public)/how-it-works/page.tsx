@@ -1,0 +1,1 @@
+export default function HowItWorksPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">How It Works</h1><p className="text-secondary">Marketplace flow overview.</p></div></div></div>; }
