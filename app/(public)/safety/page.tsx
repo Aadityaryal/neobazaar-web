@@ -1,0 +1,1 @@
+export default function SafetyPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">Safety</h1><p className="text-secondary">Safety policy and guidance.</p></div></div></div>; }

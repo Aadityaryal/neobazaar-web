@@ -1,0 +1,1 @@
+export default function PricingPage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">Pricing</h1><p className="text-secondary">Pricing and fee guide.</p></div></div></div>; }
