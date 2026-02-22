@@ -1,17 +1,23 @@
 "use server";
 
 import { updateProfile } from "@/lib/api/auth";
-import { getAuthToken, getUserData, setUserData } from "@/lib/cookie";
+import { getUserData, setUserData } from "@/lib/cookie";
 
-export const handleUpdateProfile = async (formData: FormData) => {
+export const handleUpdateProfile = async (payload: FormData | { name?: string; location?: string; kycVerified?: boolean }) => {
   try {
     const userData = await getUserData();
-    if (!userData?._id) {
+    if (!userData?.userId) {
       return { success: false, message: "User not found" };
     }
 
-    const token = await getAuthToken();
-    const response = await updateProfile(userData._id, formData, token || undefined);
+    const normalizedPayload = payload instanceof FormData
+      ? {
+          name: payload.get("name")?.toString(),
+          location: payload.get("location")?.toString(),
+        }
+      : payload;
+
+    const response = await updateProfile(userData.userId, normalizedPayload);
 
     if (response.success) {
       if (response.data) {
