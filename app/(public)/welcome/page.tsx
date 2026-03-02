@@ -1,0 +1,1 @@
+export default function WelcomePage() { return <div className="page-shell"><div className="page-container"><div className="card"><h1 className="page-title">Welcome</h1><p className="text-secondary">Onboarding welcome hub.</p></div></div></div>; }
